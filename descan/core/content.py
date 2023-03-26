@@ -3,7 +3,7 @@ from typing import List, Optional
 
 
 class Content:
-    custom_keys: Optional[List[int]] = None  # For testing purposes
+    custom_keys: Optional[List[int]] = None  # Used for testing purposes
 
     def __init__(self, identifier: bytes, data: bytes) -> None:
         self.identifier: bytes = identifier
