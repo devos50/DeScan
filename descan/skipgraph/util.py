@@ -10,6 +10,8 @@ def verify_skip_graph_integrity(nodes) -> bool:
     Verify the integrity of the Skip Graph by iterating through each skip graph, level, and by verifying the links.
     """
     def get_skip_graphs(node) -> List[SkipGraphCommunity]:
+        if node.overlay.__class__.__name__ == "SkipGraphCommunity":
+            return [node.overlay]
         return [overlay for overlay in node.overlays if overlay.__class__.__name__ == "SkipGraphCommunity"]
 
     keys_to_nodes = {}

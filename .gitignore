@@ -141,3 +141,4 @@ dmypy.json
 
 # simulation data file
 simulations/**/data
+data/**

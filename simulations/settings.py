@@ -4,19 +4,24 @@ from typing import Optional
 
 @dataclass
 class SimulationSettings:
-    # Number of IPv8 peers.
+    """
+    Generic settings related to simulations.
+    """
+
+    # The total number of IPv8 peers.
     peers: int = 100
 
     # The name of the experiment.
     name: str = ""
 
-    # Whether to run the Yappi profiler.
+    # Whether to run the Yappi profiler. This is useful to detect bottlenecks in the code.
     profile: bool = False
 
     # An optional identifier for the experiment, appended to the working directory name.
     identifier: Optional[str] = None
 
-    # The duration of the simulation in seconds.
+    # The total duration of the simulation in seconds. Note that this duration is in virtual time, e.g., if set to 120,
+    # the experiment will end after 120 virtual seconds.
     duration: int = 120
 
     # The logging level during the experiment.

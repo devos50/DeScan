@@ -19,7 +19,7 @@ class RuleExecutionEngine(TaskManager):
         self.process_queue: List[Content] = []
         self.callback: Callable = callback
 
-    def start(self, process_interval: int = 1):
+    def start(self, process_interval: float = 1):
         # Put existing content in the process queue
         all_content = self.content_db.get_all_content()
         random.shuffle(all_content)

@@ -70,7 +70,7 @@ class DKGSimulation(SkipgraphSimulation):
             for node in self.nodes:
                 node.overlay.rule_execution_engine.callback = self.on_triplets_generated
 
-        with open(os.path.join("data", self.settings.data_file_name)) as torrents_file:
+        with open(self.settings.data_file_name) as torrents_file:
             for ind, torrent_line in enumerate(torrents_file.readlines()):
                 if ind % 1000 == 0:
                     print("Processed %d torrents..." % ind)
@@ -106,7 +106,7 @@ class DKGSimulation(SkipgraphSimulation):
         # Feed Ethereum blocks to the rule execution engines
         total_tx = 0
         blocks_processed = 0
-        with open(os.path.join("data", self.settings.data_file_name)) as blocks_file:
+        with open(self.settings.data_file_name) as blocks_file:
             for ind, block_line in enumerate(blocks_file.readlines()):
                 if self.settings.max_eth_blocks and blocks_processed >= self.settings.max_eth_blocks:
                     print("Done - processed %d ETH blocks (txs so far: %d)..." % (ind, total_tx))

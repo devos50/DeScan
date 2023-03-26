@@ -33,7 +33,6 @@ class SearchSkipgraphSimulation(SkipgraphSimulation):
 
         # Schedule some searches
         successful_searches = 0
-        print(self.node_keys_sorted)
         for _ in range(self.settings.num_searches):
             results = []
             random_node = random.choice(self.online_nodes)
@@ -44,14 +43,6 @@ class SearchSkipgraphSimulation(SkipgraphSimulation):
 
             if any(results):
                 successful_searches += 1
-
-            count = 0
-            if self.settings.track_failing_nodes_in_rts:
-                offline_sg_nodes = [node.overlay.get_my_node() for node in self.offline_nodes]
-                for online_node in self.online_nodes:
-                    for node_in_rt in online_node.overlay.routing_table.get_all_nodes():
-                        if node_in_rt in offline_sg_nodes:
-                            count += 1
 
         print("Searches with incorrect result: %d" % (self.settings.num_searches - successful_searches))
 
@@ -70,7 +61,6 @@ if __name__ == "__main__":
     settings.num_searches = 1000
     settings.enable_ipv8_ticker = False
     settings.latencies_file = "data/latencies.txt"
-    settings.track_failing_nodes_in_rts = False
     settings.assign_sequential_sg_keys = True
     settings.identifier = "%d" % settings.nb_size
     simulation = SearchSkipgraphSimulation(settings)

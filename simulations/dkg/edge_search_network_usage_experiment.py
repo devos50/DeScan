@@ -33,11 +33,8 @@ if __name__ == "__main__":
             settings.duration = 3600
             settings.nb_size = 5
             settings.fast_data_injection = True
-            settings.dataset = Dataset.ETHEREUM
             settings.num_searches = 10000
-            settings.max_eth_blocks = None
             settings.skip_graphs = 5
-            settings.data_file_name = "blocks.json"
             settings.identifier = "%d" % exp_num
             settings.logging_level = "ERROR"
             settings.enable_community_statistics = True
