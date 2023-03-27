@@ -119,7 +119,7 @@ You can run the experiments with these traces enabled by setting the `latencies_
 
 ```python
 settings = DKGSimulationSettings()
-settings.latencies_file = "data/latencies.txt"
+settings.latencies_file = "latencies.txt"
 ```
 
 To verify that this latency file is being used, you should see the following lines in your experiment output:

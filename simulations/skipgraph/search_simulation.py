@@ -60,7 +60,7 @@ if __name__ == "__main__":
     settings.enable_community_statistics = True
     settings.num_searches = 1000
     settings.enable_ipv8_ticker = False
-    settings.latencies_file = "data/latencies.txt"
+    settings.latencies_file = "latencies.txt"
     settings.assign_sequential_sg_keys = True
     settings.identifier = "%d" % settings.nb_size
     simulation = SearchSkipgraphSimulation(settings)

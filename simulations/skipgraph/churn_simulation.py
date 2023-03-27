@@ -96,7 +96,7 @@ if __name__ == "__main__":
     settings.profile = False
     settings.enable_community_statistics = True
     settings.enable_ipv8_ticker = False
-    settings.latencies_file = "data/latencies.txt"
+    settings.latencies_file = "latencies.txt"
     simulation = ChurnSkipgraphSimulation(settings)
     simulation.MAIN_OVERLAY = "SkipGraphCommunity"
 
