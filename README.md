@@ -18,9 +18,7 @@ Full technical details can be found in our publicly available pre-print paper, l
 ### Project Status
 
 This repository contains a proof-of-concept implementation of DeScan.
-While this implementation has been evaluated extensively using simulations and various scenarios, it is currently not suitable for a deployment.
-For example, the implementation currently lacks a persistent layer and stores all information in memory.
-This would be a key next milestone of the DeScan project.
+The current implementation has been extensively evaluated based simulations and various scenarios. The current version, however, is not suitable for a production deployment as it lacks a persistance layer and currently stores all information in memory. Adding persistance would be the key next development of the DeScan project.
 
 ### Organization
 
