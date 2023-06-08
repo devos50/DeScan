@@ -35,3 +35,6 @@ class DKGSimulationSettings(SkipGraphSimulationSettings):
     # Used when experimenting with the "Ethereum" dataset. Indicates the number of Ethereum blocks being processed
     # during the simulation.
     max_eth_blocks: Optional[int] = None
+
+    # The transaction interval to track storage costs for different peers. Will be disabled if set to None.
+    track_storage_interval: Optional[int] = None

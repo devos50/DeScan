@@ -3,15 +3,18 @@ import os
 import random
 from asyncio import sleep
 from binascii import unhexlify, hexlify
+from statistics import NormalDist
 from typing import List, Dict
+
+from numpy import average, std
 
 from descan.core.content import Content
 from descan.core.db.triplet import Triplet
 from descan.core.rules.ethereum import EthereumBlockRule, EthereumTransactionRule
 from descan.core.rules.ptn import PTNRule
 from ipv8.configuration import ConfigBuilder
-from simulations.dkg.settings import DKGSimulationSettings, Dataset
 
+from simulations.dkg.settings import DKGSimulationSettings, Dataset
 from simulations.skipgraph.sg_simulation import SkipgraphSimulation
 
 
@@ -89,6 +92,12 @@ class DKGSimulation(SkipgraphSimulation):
         if not self.settings.fast_data_injection:
             await sleep(20)  # Give some time to store the edges in the network
 
+    def confidence_interval(self, data, confidence=0.95):
+        dist = NormalDist.from_samples(data)
+        z = NormalDist().inv_cdf((1 + confidence) / 2.)
+        h = dist.stdev * z / ((len(data) - 1) ** .5)
+        return h
+
     async def setup_ethereum_experiment(self):
         # Give each node the Ethereum rules
         eth_block_rule = EthereumBlockRule()
@@ -103,9 +112,15 @@ class DKGSimulation(SkipgraphSimulation):
             for node in self.nodes:
                 node.overlay.rule_execution_engine.callback = self.on_triplets_generated
 
+        if self.settings.track_storage_interval:
+            with open(os.path.join(self.data_dir, "kg_storage.csv"), "w") as out_file:
+                out_file.write("peers,txs_indexed,avg_storage,min_storage,max_storage,stddev_storage,conf_storage\n")
+
         # Feed Ethereum blocks to the rule execution engines
         total_tx = 0
         blocks_processed = 0
+        next_storage_analysis_checkpoint = self.settings.track_storage_interval
+
         with open(self.settings.data_file_name) as blocks_file:
             for ind, block_line in enumerate(blocks_file.readlines()):
                 if self.settings.max_eth_blocks and blocks_processed >= self.settings.max_eth_blocks:
@@ -127,6 +142,20 @@ class DKGSimulation(SkipgraphSimulation):
                 target_node.overlay.rule_execution_engine.process_queue.append(content)
                 while target_node.overlay.rule_execution_engine.process_queue:
                     target_node.overlay.rule_execution_engine.process()
+
+                # Do we need to analyse the storage?
+                if self.settings.track_storage_interval and total_tx >= next_storage_analysis_checkpoint:
+                    storage_costs: List[int] = []
+                    for ind, node in enumerate(self.nodes):
+                        storage_costs.append(node.overlay.knowledge_graph.get_storage_costs())
+
+                    # Write away the knowledge graph statistics per node
+                    with open(os.path.join(self.data_dir, "kg_storage.csv"), "a") as out_file:
+                        out_file.write("%d,%d,%d,%d,%d,%f,%f\n" % (
+                            self.settings.peers, total_tx, average(storage_costs), min(storage_costs),
+                            max(storage_costs), std(storage_costs), self.confidence_interval(storage_costs)))
+
+                    next_storage_analysis_checkpoint += self.settings.track_storage_interval
 
                 blocks_processed += 1
 

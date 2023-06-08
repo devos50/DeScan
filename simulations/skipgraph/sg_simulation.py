@@ -1,3 +1,4 @@
+import bisect
 import hashlib
 import os
 import random
@@ -73,18 +74,12 @@ class SkipgraphSimulation(BaseSimulation):
         """
         Find the responsible node that is responsible for a particular key.
         """
-        if search_key < self.node_keys_sorted[0]:
-            target_node_key = self.node_keys_sorted[0]
-        else:
-            # Perform a search through the keys
-            ind = len(self.node_keys_sorted) - 1
-            while ind >= 0:
-                if self.node_keys_sorted[ind] <= search_key:
-                    target_node_key = self.node_keys_sorted[ind]
-                    break
-                ind -= 1
+        index = bisect.bisect_left(self.node_keys_sorted, search_key)
+        # Handling the case when all numbers are smaller than x
+        if index == len(self.node_keys_sorted):
+            return self.nodes[self.key_to_node_ind[self.node_keys_sorted[index - 1]]]
 
-        return self.nodes[self.key_to_node_ind[target_node_key]]
+        return self.nodes[self.key_to_node_ind[self.node_keys_sorted[index]]]
 
     async def do_search(self, delay, node, search_key):
         await sleep(delay)
