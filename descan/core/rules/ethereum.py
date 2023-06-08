@@ -15,7 +15,7 @@ class EthereumBlockRule(Rule):
 
     def apply_rule(self, engine: RuleExecutionEngine, content: Content) -> Set[Triplet]:
         triplets = set()
-        block_json = json.loads(content.data)
+        block_json = content.data
         if "miner" not in block_json:
             return set()  # This doesn't seem to be a block
 
@@ -30,7 +30,7 @@ class EthereumBlockRule(Rule):
         # We now parse all the transactions and add them as new content items to the rule execution engine
         for transaction in block_json["transactions"]:
             tx_hash = unhexlify(transaction["hash"][2:])
-            content = Content(tx_hash, json.dumps(transaction).encode())
+            content = Content(tx_hash, transaction)
             engine.process_queue.append(content)
 
         return triplets
@@ -41,7 +41,7 @@ class EthereumTransactionRule(Rule):
 
     def apply_rule(self, engine: RuleExecutionEngine, content: Content) -> Set[Triplet]:
         triplets = set()
-        tx_json = json.loads(content.data)
+        tx_json = content.data
         if "from" not in tx_json:
             return set()  # This doesn't seem to be a transaction
 

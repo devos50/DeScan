@@ -133,8 +133,7 @@ class DKGSimulation(SkipgraphSimulation):
                 block_json = json.loads(block_line.strip())
                 total_tx += len(block_json["transactions"])
                 content_hash = unhexlify(block_json["hash"][2:])
-                content_data = block_line.strip().encode()
-                content = Content(content_hash, content_data)
+                content = Content(content_hash, block_json)
 
                 target_node = self.nodes[ind % len(self.nodes)]
                 target_node.overlay.content_db.add_content(content)
