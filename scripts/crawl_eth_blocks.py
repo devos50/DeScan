@@ -33,5 +33,8 @@ with open(BLOCKS_FILE, "a") as blocks_file:
         json_block = response.json()["result"]
         blocks_file.write(json.dumps(json_block) + "\n")
         print("Crawled and persisted block %d" % cur_block_ind)
+
+        with open("last_block.txt", "w") as last_block_file:
+            last_block_file.write("%s" % cur_block_ind)
         cur_block_ind += 1
         sleep(1)
