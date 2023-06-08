@@ -15,6 +15,10 @@ class KnowledgeGraph:
         self.graph = nx.DiGraph()
         self.stored_content: Set[bytes] = set()
 
+    def reset(self) -> None:
+        self.graph = nx.DiGraph()
+        self.stored_content = set()
+
     def add_triplet(self, triplet: Triplet) -> None:
         self.stored_content.add(triplet.head)
         if self.graph.has_edge(triplet.head, triplet.tail):

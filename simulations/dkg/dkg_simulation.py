@@ -120,6 +120,7 @@ class DKGSimulation(SkipgraphSimulation):
         total_tx = 0
         blocks_processed = 0
         next_storage_analysis_checkpoint = self.settings.track_storage_interval
+        storage_costs = [0] * len(self.nodes)
 
         with open(self.settings.data_file_name) as blocks_file:
             for ind, block_line in enumerate(blocks_file.readlines()):
@@ -144,9 +145,9 @@ class DKGSimulation(SkipgraphSimulation):
 
                 # Do we need to analyse the storage?
                 if self.settings.track_storage_interval and total_tx >= next_storage_analysis_checkpoint:
-                    storage_costs: List[int] = []
                     for ind, node in enumerate(self.nodes):
-                        storage_costs.append(node.overlay.knowledge_graph.get_storage_costs())
+                        storage_costs[ind] += node.overlay.knowledge_graph.get_storage_costs()
+                        node.overlay.knowledge_graph.reset()
 
                     # Write away the knowledge graph statistics per node
                     with open(os.path.join(self.data_dir, "kg_storage.csv"), "a") as out_file:
