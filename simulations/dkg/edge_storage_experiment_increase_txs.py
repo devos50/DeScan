@@ -31,6 +31,7 @@ if __name__ == "__main__":
         settings.replication_factor = 1
         settings.duration = 3600
         settings.nb_size = 1
+        settings.identifier = "%d" % exp_num
         settings.fast_data_injection = True
         settings.num_searches = 0
         settings.skip_graphs = 1
