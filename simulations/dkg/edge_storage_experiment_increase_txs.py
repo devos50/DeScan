@@ -36,7 +36,7 @@ if __name__ == "__main__":
             settings.num_searches = 0
             settings.skip_graphs = 1
             settings.logging_level = "ERROR"
-            settings.track_storage_interval = 100000
+            settings.track_storage_interval = 1000000
             settings.data_file_name = "scripts/blocks.json"
             settings.enable_community_statistics = True
             settings.enable_ipv8_ticker = False
