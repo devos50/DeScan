@@ -114,7 +114,7 @@ class DKGSimulation(SkipgraphSimulation):
 
         if self.settings.track_storage_interval:
             with open(os.path.join(self.data_dir, "kg_storage.csv"), "w") as out_file:
-                out_file.write("peers,txs_indexed,avg_storage,min_storage,max_storage,stddev_storage,conf_storage\n")
+                out_file.write("peers,txs_indexed,avg_storage,min_storage,max_storage,total_storage,stddev_storage,conf_storage\n")
 
         # Feed Ethereum blocks to the rule execution engines
         total_tx = 0
@@ -151,9 +151,9 @@ class DKGSimulation(SkipgraphSimulation):
 
                     # Write away the knowledge graph statistics per node
                     with open(os.path.join(self.data_dir, "kg_storage.csv"), "a") as out_file:
-                        out_file.write("%d,%d,%d,%d,%d,%f,%f\n" % (
+                        out_file.write("%d,%d,%d,%d,%d,%d,%f,%f\n" % (
                             self.settings.peers, total_tx, average(storage_costs), min(storage_costs),
-                            max(storage_costs), std(storage_costs), self.confidence_interval(storage_costs)))
+                            max(storage_costs), sum(storage_costs), std(storage_costs), self.confidence_interval(storage_costs)))
 
                     next_storage_analysis_checkpoint += self.settings.track_storage_interval
 
