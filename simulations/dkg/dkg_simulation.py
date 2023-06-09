@@ -160,6 +160,7 @@ class DKGSimulation(SkipgraphSimulation):
                 blocks_processed += 1
 
         print("Total ETH transactions: %d" % total_tx)
+        exit(0)
 
     async def start_ipv8_nodes(self) -> None:
         await super().start_ipv8_nodes()
